@@ -1,0 +1,133 @@
+<!DOCTYPE html>
+<html lang="en">
+
+	<head>
+		<meta charset="UTF-8">
+		<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+		<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/css/bootstrap.min.css"
+			integrity="sha384-9aIt2nRpC12Uk9gS9baDl411NQApFmC26EwAOH8WgZl5MYYxFfc+NcPb1dKGj7Sk" crossorigin="anonymous">
+		<link href='https://fonts.googleapis.com/css?family=Karla' rel='stylesheet' type='text/css'>
+		<link rel="stylesheet" href="style.css">
+		<title>Document</title>
+	</head>
+
+	<body>
+		<div id="app">
+			<div :class="[modal.enable?'opa-50':'','container-fluid py-5']">
+				<button type="button" class="btn btn-primary float-right" @click="showModal('create')">Create</button>
+				<table class="table">
+					<h1>List of Products</h1>
+					<thead class="thead-dark">
+						<tr>
+							<th scope="col">Category</th>
+							<th scope="col">Product Name</th>
+							<th scope="col">List Price</th>
+							<th scope="col">Retail Price</th>
+							<th scope="col">Enable</th>
+							<th scope="col">Actions</th>
+						</tr>
+					</thead>
+					<tbody>
+						<template v-if="productList.length > 0">
+							<tr v-for="product in productList" :key="product.id">
+								<td>{{product.category}}</td>
+								<td>{{product.name}}</td>
+								<td>{{product.listPrice && product.listPrice.toLocaleString()}}</td>
+								<td>{{product.retailPrice && product.retailPrice.toLocaleString()}}</td>
+								<td>{{product.enable?"enabled":"disabled"}}</td>
+								<td>
+									<div class="btn-group" role="group" aria-label="Button group">
+										<button type="button" class="btn btn-outline-primary"
+											@click="showModal('edit',product.id)">Edit</button>
+										<button type="button" class="btn btn-outline-danger"
+											@click="deleteProduct(product.id)">delete</button>
+									</div>
+								</td>
+							</tr>
+						</template>
+						<template v-else>
+							N/A
+						</template>
+					</tbody>
+				</table>
+			</div>
+			<div :class="[modal.enable?modal.enableClass:'','modal fade']" id="ProductModal" tabindex="-1" role="dialog"
+				aria-labelledby="ProductModalLabel" aria-hidden="true">
+				<div class="modal-dialog modal-dialog-scrollable">
+					<div class="modal-content">
+						<div class="modal-header">
+							<h5 class="modal-title" id="ProductModalLabel">{{modal.title}}</h5>
+							<button type="button" class="close" data-dismiss="modal" aria-label="Close"
+								@click="hideModal">
+								<span aria-hidden="true">&times;</span>
+							</button>
+						</div>
+						<div class="modal-body">
+							<form>
+								<div class="form-group">
+									<label for="imageUrl">Image Url</label>
+									<input id="imageUrl" v-model="tempProduct.imageUrl" class="form-control" type="text"
+										name="">
+								</div>
+								<img v-if="tempProduct.imageUrl" :src="tempProduct.imageUrl" class="img-fluid"
+									alt="image preview">
+								<div class="form-group">
+									<label for="name">Name</label>
+									<input id="name" v-model="tempProduct.name" class="form-control" type="text"
+										name="">
+								</div>
+								<div class="form-group">
+									<label for="category">Category</label>
+									<input id="category" v-model="tempProduct.category" class="form-control" type="text"
+										name="">
+								</div>
+								<div class="form-group">
+									<label for="unit">Unit</label>
+									<input id="unit" v-model="tempProduct.unit" class="form-control" type="text"
+										name="">
+								</div>
+								<div class="form-group">
+									<label for="listPrice">List Price</label>
+									<input id="listPrice" v-model="tempProduct.listPrice" class="form-control"
+										type="number" name="">
+								</div>
+								<div class="form-group">
+									<label for="retailPrice">Retail Price</label>
+									<input id="retailPrice" v-model="tempProduct.retailPrice" class="form-control"
+										type="number" name="">
+								</div>
+								<div class="form-group">
+									<label for="description">Description
+									</label>
+									<input id="description" v-model="tempProduct.description" class="form-control"
+										type="text" name="">
+								</div>
+								<div class="form-group">
+									<label for="content">Content</label>
+									<input id="content" v-model="tempProduct.content" class="form-control" type="text"
+										name="">
+								</div>
+								<div class="form-check">
+									<input id="enable" class="form-check-input" type="checkbox" name=""
+										v-model="tempProduct.enable">
+									<label for="enable" class="form-check-label">Enable</label>
+								</div>
+							</form>
+						</div>
+						<div class="modal-footer">
+							<button type="button" class="btn btn-secondary" data-dismiss="modal"
+								@click="hideModal">Close</button>
+							<button type="button" class="btn btn-primary" @click="updateProduct">Save changes</button>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+		<script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"
+			integrity="sha384-DfXdz2htPH0lsSSs5nCTpuj/zy4C+OGpamoFVy38MVBnE+IbbVYUew+OrCXaRkfj"
+			crossorigin="anonymous"></script>
+		<script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
+		<script src="index.js"></script>
+	</body>
+
+</html>
