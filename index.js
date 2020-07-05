@@ -93,7 +93,6 @@ window.addEventListener('load', function (event) {
 								this.productList[index] = { ...this.tempProduct }
 							}
 						})
-						this.tempProduct = {}
 						break
 					default:
 						break
