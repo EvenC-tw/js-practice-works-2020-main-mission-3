@@ -6,6 +6,7 @@ var app = new Vue({
 			status: false,
 			expired: null,
 			token: '',
+			uuid: '',
 		},
 	},
 	components: {
@@ -15,19 +16,20 @@ var app = new Vue({
 	},
 	template: `
 	<div>
-		<product-list></product-list>
+		<product-list :uuid="loginData.uuid" :login-status="loginData.status"></product-list>
 		<product-modal></product-modal>
-		<login-modal @getLoginData="setLoginData" :login-status="this.loginData.status"></login-modal>
+		<login-modal @getLoginData="setLoginData" :login-status="loginData.status"></login-modal>
 	</div>
 	`,
 	methods: {
 		setLoginData(data) {
 			console.log(data)
-			const { success, expired, token } = data
+			const { success, expired, token, uuid } = data
 			if (!success) return
 			this.loginData.status = success
 			this.loginData.token = token
 			this.loginData.expired = expired
+			this.loginData.uuid = uuid
 
 			document.cookie = `token=${token};expires=${new Date(expired * 1000)}; path=/`
 
@@ -39,6 +41,7 @@ var app = new Vue({
 		this.loginData.token = document.cookie.replace(/(?:(?:^|.*;\s*)token\s*\=\s*([^;]*).*$)|^.*$/, '$1')
 		if (this.loginData.token !== '') {
 			this.loginData.status = true
+			// this.loginData.uuid = document.cookie.replace(/(?:(?:^|.*;\s*)uuid\s*\=\s*([^;]*).*$)|^.*$/, '$1')
 		}
 	},
 	updated() {

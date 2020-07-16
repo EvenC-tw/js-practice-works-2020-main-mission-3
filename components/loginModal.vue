@@ -75,7 +75,7 @@ module.exports = {
 	methods: {
 		handleLogin() {
 			apis.login(this.loginForm, (res) => {
-				this.$emit('getLoginData', res.data)
+				this.$emit('getLoginData', res)
 			})
 		},
 		hideModal() {
@@ -87,8 +87,8 @@ module.exports = {
 		this.modal.enable = !this.loginStatus
 	},
 	watch: {
-		loginStatus(current, prev) {
-			this.modal.enable = !current
+		loginStatus(curr, prev) {
+			this.modal.enable = !curr
 		},
 	},
 }
