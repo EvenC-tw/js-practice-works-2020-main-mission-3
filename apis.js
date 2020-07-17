@@ -1,15 +1,14 @@
 const uuid = `f7828c74-e344-45f1-a069-f542ff88c6fc`
-const apis = {
-	callbackProxy(res, callback) {
+const proxies = {
+	callbackPX(res, callback) {
 		return (function () {
 			if (callback && typeof callback === 'function') {
 				const { status, data } = res
-				console.log(data)
 				callback(data)
 			}
 		})()
 	},
-	errorProxy(err) {
+	errorPX(err) {
 		const {
 			response: { status },
 		} = err
@@ -26,24 +25,38 @@ const apis = {
 				break
 		}
 	},
+}
+const apis = {
 	login(data, callback) {
 		axios
 			.post(`auth/login`, data)
-			.then((res) => this.callbackProxy(res, callback))
-			.catch(this.errorProxy)
+			.then((res) => proxies.callbackPX(res, callback))
+			.catch(proxies)
+	},
+	createProduct(data, callback) {
+		axios
+			.post(`${uuid}/admin/ec/product`, data)
+			.then((res) => proxies.callbackPX(res, callback))
+			.catch(proxies)
 	},
 	getProductList(data, callback) {
-		const { uuid } = data
 		axios
 			.get(`${uuid}/admin/ec/products`)
-			.then((res) => this.callbackProxy(res, callback))
-			.catch(this.errorProxy)
+			.then((res) => proxies.callbackPX(res, callback))
+			.catch(proxies)
+	},
+	updateProduct(data, callback) {
+		const { id, tempProduct } = data
+		axios
+			.patch(`${uuid}/admin/ec/product/${id}`, tempProduct)
+			.then((res) => proxies.callbackPX(res, callback))
+			.catch(proxies)
 	},
 	deleteProduct(data, callback) {
 		const { id } = data
 		axios
 			.delete(`${uuid}/admin/ec/product/${id}`)
-			.then((res) => this.callbackProxy(res, callback))
-			.catch(this.errorProxy)
+			.then((res) => proxies.callbackPX(res, callback))
+			.catch(proxies)
 	},
 }

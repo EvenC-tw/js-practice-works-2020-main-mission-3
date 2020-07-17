@@ -20,15 +20,15 @@
 							<label for="imageUrl">Image Url</label>
 							<input
 								id="imageUrl"
-								v-model="tempProduct.imageUrl"
+								v-model="tempProduct.imageUrl && tempProduct.imageUrl[0]"
 								class="form-control"
 								type="text"
 								name=""
 							/>
 						</div>
 						<img
-							v-if="tempProduct.imageUrl"
-							:src="tempProduct.imageUrl"
+							v-if="tempProduct.imageUrl && tempProduct.imageUrl[0]"
+							:src="tempProduct.imageUrl && tempProduct.imageUrl[0]"
 							class="img-fluid"
 							alt="image preview"
 						/>
@@ -128,17 +128,20 @@ module.exports = {
 		}
 	},
 	created() {
-		this.$bus.$on('showModal', this.showModal)
-		this.$bus.$on('updateTempProduct', this.updateTempProduct)
+		this.$bus.$on('productModal.showModal', this.showModal)
+		this.$bus.$on('productModal.updateTempProduct', this.updateTempProduct)
 	},
 	methods: {
 		updateProduct() {
 			switch (this.modal.type) {
 				case 'create':
-					this.$bus.$emit('createProduct', { ...this.tempProduct })
+					this.$bus.$emit('productList.createProduct', { ...this.tempProduct })
 					break
 				case 'edit':
-					this.$bus.$emit('updateProduct', { id: this.tempProduct.id, tempProduct: { ...this.tempProduct } })
+					this.$bus.$emit('productList.updateProduct', {
+						id: this.tempProduct.id,
+						tempProduct: { ...this.tempProduct },
+					})
 					break
 				default:
 					break
@@ -151,14 +154,14 @@ module.exports = {
 		hideModal() {
 			this.tempProduct = {}
 			this.modal.enable = false
-			this.$bus.$emit('updateModalShow', false)
+			this.$bus.$emit('productList.updateModalShow', false)
 		},
 		showModal(data) {
 			const { type, title } = data
 			this.modal.enable = true
 			this.modal.type = type
 			this.modal.title = title
-			this.$bus.$emit('updateModalShow', true)
+			this.$bus.$emit('productList.updateModalShow', true)
 		},
 	},
 }

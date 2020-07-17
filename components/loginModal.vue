@@ -9,13 +9,9 @@
 		<div class="modal-dialog modal-dialog-scrollable">
 			<div class="modal-content">
 				<div class="modal-header">
-					<h5 class="modal-title" id="LoginModalLabel">{{ modal.title }}</h5>
-					<button type="button" class="close" data-dismiss="modal" aria-label="Close" @click="hideModal">
-						<span aria-hidden="true">&times;</span>
-					</button>
+					<h5 class="modal-title text-center w-100" id="LoginModalLabel">{{ modal.title }}</h5>
 				</div>
 				<div class="modal-body">
-					<h3 class="text-center">Login Now!</h3>
 					<form>
 						<div class="form-group">
 							<label for="email">Email</label>
@@ -62,7 +58,7 @@ module.exports = {
 			modal: {
 				enable: null,
 				enableClass: 'show d-block',
-				title: '',
+				title: 'Welcome Admin Dashboard',
 				type: '',
 			},
 			loginForm: {
