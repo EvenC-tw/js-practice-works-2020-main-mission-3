@@ -54,34 +54,7 @@ module.exports = {
 	props: ['uuid', 'loginStatus'],
 	data() {
 		return {
-			productList: [
-				// {
-				// 	id: 1593895500818,
-				// 	name: 'switch',
-				// 	category: 'Handheld Console',
-				// 	content: '',
-				// 	description: '',
-				// 	imageUrl: '',
-				// 	enable: true,
-				// 	listPrice: 8700,
-				// 	retailPrice: 8450,
-				// 	unit: '',
-				// 	options: null,
-				// },
-				// {
-				// 	id: 1593895500819,
-				// 	name: 'play station 5',
-				// 	category: 'Home Console',
-				// 	content: '',
-				// 	description: '',
-				// 	imageUrl: '',
-				// 	enable: false,
-				// 	listPrice: 16900,
-				// 	retailPrice: 16900,
-				// 	unit: '',
-				// 	options: null,
-				// },
-			],
+			productList: [],
 			isModalShow: false,
 		}
 	},
@@ -111,10 +84,8 @@ module.exports = {
 			this.$bus.$emit('updateTempProduct', tempProduct)
 		},
 		deleteProduct(id) {
-			this.productList.forEach((product, index) => {
-				if (product.id === id) {
-					this.productList.splice(index, 1)
-				}
+			apis.deleteProduct({ id }, (res) => {
+				this.getProductList()
 			})
 		},
 		createProduct(tempProduct) {
@@ -131,42 +102,42 @@ module.exports = {
 		updateModalShow(data) {
 			this.isModalShow = data
 		},
-		getProducts() {
+		getProductList() {
 			apis.getProductList({ uuid: this.uuid }, (res) => {
-				console.log(res.data)
-				if (res.data) {
-					this.productList = res.data.map((item) => {
-						const { id, title, category, content, imageUrl, enable, origin_price, price, unit } = item
-						return {
-							id,
-							name: title,
-							category,
-							content,
-							description: '',
-							imageUrl,
-							enable,
-							listPrice: origin_price,
-							retailPrice: price,
-							unit,
-							options: null,
-						}
-					})
+				res.data && this.productListRetrive(res.data)
+			})
+		},
+		productListRetrive(data) {
+			this.productList = data.map((item) => {
+				const { id, title, category, content, imageUrl, enable, origin_price, price, unit } = item
+				return {
+					id,
+					name: title,
+					category,
+					content,
+					description: '',
+					imageUrl,
+					enable,
+					listPrice: origin_price,
+					retailPrice: price,
+					unit,
+					options: null,
 				}
 			})
 		},
 	},
 	updated() {},
-	mounted() {},
+	mounted() {
+		if (this.loginStatus) {
+			this.getProductList()
+		}
+	},
 	watch: {
 		loginStatus(curr, prev) {
 			if (curr) {
-				this.getProducts()
+				this.getProductList()
 			}
 		},
 	},
 }
 </script>
-category: "可以被刪除的冰淇淋" content: "可以被刪除的香濃牛奶林上絲滑蜂蜜" enabled: true id:id, imageUrl:
-["https://i.imgur.com/l1nN52D.png"] origin_price: 260 price: 215 title: "可以被刪除的牛奶蜂蜜" unit: "單位" id:id, id,
-name: title, category, content, description: '', imageUrl, enable, listPrice: origin_price, retailPrice: price, unit,
-options: null,

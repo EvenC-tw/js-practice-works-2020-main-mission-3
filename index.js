@@ -6,7 +6,7 @@ var app = new Vue({
 			status: false,
 			expired: null,
 			token: '',
-			uuid: '',
+			uuid: 'f7828c74-e344-45f1-a069-f542ff88c6fc',
 		},
 	},
 	components: {
@@ -24,12 +24,11 @@ var app = new Vue({
 	methods: {
 		setLoginData(data) {
 			console.log(data)
-			const { success, expired, token, uuid } = data
+			const { success, expired, token } = data
 			if (!success) return
 			this.loginData.status = success
 			this.loginData.token = token
 			this.loginData.expired = expired
-			this.loginData.uuid = uuid
 
 			document.cookie = `token=${token};expires=${new Date(expired * 1000)}; path=/`
 
@@ -41,7 +40,7 @@ var app = new Vue({
 		this.loginData.token = document.cookie.replace(/(?:(?:^|.*;\s*)token\s*\=\s*([^;]*).*$)|^.*$/, '$1')
 		if (this.loginData.token !== '') {
 			this.loginData.status = true
-			// this.loginData.uuid = document.cookie.replace(/(?:(?:^|.*;\s*)uuid\s*\=\s*([^;]*).*$)|^.*$/, '$1')
+			setAxios.setHead('Authorization', `Bearer ${token}`)
 		}
 	},
 	updated() {
